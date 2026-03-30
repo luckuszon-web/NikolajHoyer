@@ -172,7 +172,7 @@
     .calc-tab.active { color: var(--black); border-bottom-color: var(--black); }
     .calc-body { display: grid; grid-template-columns: 1fr 1fr; }
     .calc-sliders { padding: 2.5rem; border-right: 1px solid var(--light); }
-    .calc-result { padding: 2.5rem; background: var(--green); color: white; }
+    .calc-result { padding: 2.5rem; background: var(--bg2); }
     .c-slider-row { margin-bottom: 2rem; }
     .c-slider-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; }
     .c-slider-label { font-size: 0.82rem; color: var(--black); }
@@ -181,18 +181,18 @@
     .c-range { -webkit-appearance: none; appearance: none; width: 100%; height: 1px; background: var(--light); outline: none; cursor: pointer; }
     .c-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--black); cursor: pointer; border-radius: 50%; }
     .c-tag-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 0.6rem; }
-    .c-tag { font-size: 0.7rem; padding: 3px 9px; background: var(--bg2); color: var(--gray); border: 1px solid var(--light); transition: all 0.15s; cursor: default; }
+    .c-tag { font-size: 0.7rem; padding: 3px 9px; background: var(--bg); color: var(--gray); border: 1px solid var(--light); transition: all 0.15s; cursor: default; }
     .c-tag.active { background: var(--black); color: white; border-color: var(--black); }
-    .result-label-sm { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 0.4rem; display: block; }
-    .result-total { font-family: 'Libre Baskerville', serif; font-size: 2.5rem; font-weight: 700; color: white; line-height: 1; margin-bottom: 0.3rem; }
+    .result-label-sm { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.4rem; display: block; }
+    .result-total { font-family: 'Libre Baskerville', serif; font-size: 2.5rem; font-weight: 700; color: var(--black); line-height: 1; margin-bottom: 0.3rem; }
     .result-sub-row { display: flex; gap: 2rem; margin-top: 1.5rem; margin-bottom: 2rem; }
-    .result-sub-val { font-size: 1rem; font-weight: 500; color: white; }
-    .result-divider { border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 1.5rem 0; }
-    .breakdown-row-c { display: flex; justify-content: space-between; font-size: 0.79rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.65); }
-    .breakdown-row-c:last-child { border-bottom: none; color: white; font-weight: 500; }
-    .calc-note { font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.7; margin-top: 1.5rem; }
-    .calc-cta { display: block; margin-top: 1.5rem; text-align: center; background: white; color: var(--green); padding: 0.85rem; text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.04em; transition: background 0.2s, color 0.2s; }
-    .calc-cta:hover { background: var(--black); color: white; }
+    .result-sub-val { font-size: 1rem; font-weight: 500; color: var(--black); }
+    .result-divider { border: none; border-top: 1px solid var(--light); margin: 1.5rem 0; }
+    .breakdown-row-c { display: flex; justify-content: space-between; font-size: 0.79rem; padding: 0.5rem 0; border-bottom: 1px solid var(--light); color: var(--gray); }
+    .breakdown-row-c:last-child { border-bottom: none; color: var(--black); font-weight: 500; }
+    .calc-note { font-size: 0.72rem; color: var(--gray); opacity: 0.7; line-height: 1.7; margin-top: 1.5rem; }
+    .calc-cta { display: block; margin-top: 1.5rem; text-align: center; background: var(--black); color: white; padding: 0.85rem; text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.04em; transition: background 0.2s, color 0.2s; }
+    .calc-cta:hover { background: var(--green); color: white; }
 
     /* KONTAKT */
     .contact { background: var(--bg2); border-top: 1px solid var(--light); }
@@ -204,14 +204,14 @@
     .contact-item-val { font-size: 0.93rem; color: var(--black); }
     .contact-item-val a { color: inherit; text-decoration: none; }
     .contact-item-val a:hover { color: var(--green); }
-    .contact-form { display: flex; flex-direction: column; }
-    .contact-form input, .contact-form textarea, .contact-form select { background: var(--bg); border: 1px solid var(--light); border-top: none; color: var(--black); padding: 1rem 1.2rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; outline: none; width: 100%; transition: border-color 0.2s; }
-    .contact-form .form-row { border-top: 1px solid var(--light); display: grid; grid-template-columns: 1fr 1fr; }
-    .contact-form .form-row input { border-top: none; }
-    .contact-form .form-row input:first-child { border-right: none; }
-    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--black); position: relative; z-index: 1; }
-    .contact-form textarea { resize: vertical; min-height: 130px; }
-    .contact-form .btn-primary { align-self: flex-start; margin-top: 1.5rem; }
+    .contact-form { display: flex; flex-direction: column; gap: 0; margin-top: 2.5rem; border-top: 1px solid var(--light); }
+    .contact-form input, .contact-form textarea, .contact-form select { background: transparent; border: none; border-bottom: 1px solid var(--light); color: var(--black); padding: 1rem 0; font-family: 'Outfit', sans-serif; font-size: 0.9rem; outline: none; width: 100%; transition: border-color 0.2s; appearance: none; -webkit-appearance: none; }
+    .contact-form select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234A3F35' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0 center; padding-right: 1.5rem; cursor: pointer; }
+    .contact-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .contact-form .form-row input { border-bottom: 1px solid var(--light); }
+    .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { border-bottom-color: var(--black); }
+    .contact-form textarea { resize: none; min-height: 120px; }
+    .contact-form .btn-primary { align-self: flex-start; margin-top: 2rem; }
 
     /* FOOTER */
     footer { background: var(--black); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
