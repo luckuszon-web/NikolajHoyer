@@ -18,8 +18,8 @@
       --green: #5C4A32;
     }
 
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--black); overflow-x: hidden; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--black); overflow-x: hidden; -webkit-text-size-adjust: 100%; }
 
     /* NAV */
     nav {
@@ -225,20 +225,63 @@
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 900px) {
+      /* NAV */
       nav { padding: 1rem 1.5rem; }
       .nav-links, .nav-cta { display: none; }
-      .section { padding: 5rem 1.5rem; }
-      .hero { padding: 8rem 1.5rem 5rem; }
+
+      /* HERO */
+      .hero { padding: 7rem 1.5rem 4rem; min-height: 100svh; text-align: center; }
+      .hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
+      .hero p { font-size: 0.9rem; max-width: 100%; margin: 1.2rem auto 2rem; }
+      .hero-badge { font-size: 0.65rem; }
+      .hero-ctas { flex-direction: column; align-items: center; gap: 0.8rem; }
+      .hero-ctas a { width: 100%; max-width: 280px; text-align: center; }
+      .hero-pills { justify-content: center; gap: 0.5rem; }
+      .hero-pill { font-size: 0.65rem; }
       .hero::after { left: 1.5rem; right: 1.5rem; }
-      .services-grid, .about-inner, .contact-inner, .materials-inner, .process-inner, .editorial-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .services-grid { grid-template-columns: 1fr; }
+
+      /* SECTIONS */
+      .section { padding: 4rem 1.5rem; }
+      .section-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+      .section-sub { max-width: 100%; font-size: 0.9rem; }
+
+      /* SERVICES */
+      .services-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+
+      /* EDITORIAL */
+      .editorial { overflow: hidden; }
+      .editorial-inner { grid-template-columns: 1fr; gap: 0; }
+      .editorial-text, .editorial-text.right, .editorial-text.left { padding: 2.5rem 1.5rem; order: 2; }
+      .editorial-img { padding: 0; order: 1; }
+      .editorial-img img { border-radius: 0; height: 240px; width: 100%; }
+      .editorial-title { font-size: clamp(1.4rem, 5.5vw, 2rem); margin-bottom: 1.2rem; }
+      .editorial-bullets { gap: 0.4rem 1.2rem; }
+      .material-tag { font-size: 0.75rem; }
+
+      /* PRISBEREGNER */
+      .calc-inner { margin: 2rem 0 0; }
       .calc-body { grid-template-columns: 1fr; }
-      .calc-sliders { border-right: none; border-bottom: 1px solid var(--light); }
-      .editorial-text, .editorial-text.right, .editorial-text.left { padding: 3rem 1.5rem; }
-      .editorial-img { padding: 1rem 1.5rem; }
-      .editorial-img img { height: 280px; }
-      .editorial-img img { border-radius: 14px; height: 260px; }
-      footer { padding: 2rem 1.5rem; }
+      .calc-sliders { border-right: none; border-bottom: 1px solid var(--light); padding: 1.5rem; }
+      .calc-result { padding: 1.5rem; }
+      .result-total { font-size: 2rem; }
+      .c-slider-row { margin-bottom: 1.5rem; }
+
+      /* KONTAKT */
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-form { margin-top: 0; }
+      .contact-form .form-row { grid-template-columns: 1fr; gap: 0; }
+      .contact-form .btn-primary { width: 100%; text-align: center; }
+
+      /* FOOTER */
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; gap: 0.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero { padding: 6rem 1.2rem 3.5rem; }
+      .section { padding: 3.5rem 1.2rem; }
+      .service-card { padding: 1.8rem 1.5rem; }
+      nav { padding: 0.9rem 1.2rem; }
     }
   </style>
 </head>
@@ -521,10 +564,14 @@
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => observer.observe(el));
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('visible'));
+    }
 
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
