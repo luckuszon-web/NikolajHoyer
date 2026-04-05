@@ -793,7 +793,7 @@
         b.classList.toggle('active', b.getAttribute('onclick').includes("'" + cat + "'"));
       });
       document.querySelectorAll('.gallery-item').forEach(item => {
-        item.classList.toggle('hidden', cat !== 'alle' && item.dataset.cat !== cat);
+        item.style.display = (cat === 'alle' || item.dataset.cat === cat) ? '' : 'none';
       });
     }
   </script>
