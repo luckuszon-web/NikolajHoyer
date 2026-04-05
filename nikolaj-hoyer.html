@@ -564,10 +564,10 @@
       <p class="section-sub">Et udvalg af vores arbejde – terrasser, hegn og tømrerarbejde udført i Nordsjælland.</p>
     </div>
     <div class="gallery-filters reveal">
-      <button class="gf-btn active" onclick="filterGallery('alle')">Alle</button>
-      <button class="gf-btn" onclick="filterGallery('terrasse')">Terrasser</button>
-      <button class="gf-btn" onclick="filterGallery('hegn')">Hegn & låger</button>
-      <button class="gf-btn" onclick="filterGallery('indvendigt')">Indvendigt arbejde</button>
+      <button class="gf-btn active" onclick="filterGallery('alle', this)">Alle</button>
+      <button class="gf-btn" onclick="filterGallery('terrasse', this)">Terrasser</button>
+      <button class="gf-btn" onclick="filterGallery('hegn', this)">Hegn & låger</button>
+      <button class="gf-btn" onclick="filterGallery('indvendigt', this)">Indvendigt arbejde</button>
     </div>
     <div class="gallery-grid reveal">
       <div class="gallery-item" data-cat="hegn" onclick="openLightbox(0)">
@@ -788,12 +788,11 @@
       if (e.key === 'ArrowRight') lightboxNav(1);
     });
 
-    function filterGallery(cat) {
-      document.querySelectorAll('.gf-btn').forEach(b => {
-        b.classList.toggle('active', b.getAttribute('onclick').includes("'" + cat + "'"));
-      });
-      document.querySelectorAll('.gallery-item').forEach(item => {
-        item.style.display = (cat === 'alle' || item.dataset.cat === cat) ? '' : 'none';
+    function filterGallery(cat, btn) {
+      document.querySelectorAll('.gf-btn').forEach(function(b) { b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.gallery-item').forEach(function(item) {
+        item.style.display = (cat === 'alle' || item.getAttribute('data-cat') === cat) ? '' : 'none';
       });
     }
   </script>
