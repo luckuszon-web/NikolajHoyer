@@ -37,6 +37,15 @@
     .nav-links a:hover { color: var(--black); }
     .nav-cta { font-size: 0.8rem; font-weight: 500; color: var(--black); text-decoration: none; border: 1px solid var(--black); padding: 0.5rem 1.2rem; letter-spacing: 0.04em; transition: background 0.2s, color 0.2s; }
     .nav-cta:hover { background: var(--black); color: white; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--black); transition: all 0.3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-mobile { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { text-decoration: none; color: var(--black); font-size: 1.2rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; }
+    .nav-mobile .nav-cta { font-size: 1rem; margin-top: 1rem; }
 
     /* HERO */
     .hero {
@@ -250,6 +259,7 @@
       /* NAV */
       nav { padding: 1rem 1.5rem; }
       .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
 
       /* HERO */
       .hero { padding: 7rem 1.5rem 4rem; min-height: 100svh; text-align: center; }
@@ -318,10 +328,20 @@
       <li><a href="#ydelser">Ydelser</a></li>
       <li><a href="#om">Om</a></li>
       <li><a href="#prisberegner">Prisberegner</a></li>
-        <li><a href="#galleri">Galleri</a></li>
+      <li><a href="#galleri">Galleri</a></li>
     </ul>
     <a href="#kontakt" class="nav-cta">Kontakt</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="#ydelser" onclick="closeMobileMenu()">Ydelser</a>
+    <a href="#om" onclick="closeMobileMenu()">Om</a>
+    <a href="#prisberegner" onclick="closeMobileMenu()">Prisberegner</a>
+    <a href="#galleri" onclick="closeMobileMenu()">Galleri</a>
+    <a href="#kontakt" class="nav-cta" onclick="closeMobileMenu()">Kontakt</a>
+  </div>
 
   <section class="hero">
     <div>
@@ -889,6 +909,18 @@
       if (e.key === 'ArrowRight') lightboxNav(1);
     });
 
+    function toggleMobileMenu() {
+      var btn = document.getElementById('hamburger');
+      var menu = document.getElementById('mobileMenu');
+      btn.classList.toggle('open');
+      menu.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobileMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
     function filterGallery(cat, btn) {
       document.querySelectorAll('.gf-btn').forEach(function(b) { b.classList.remove('active'); });
       if (btn) btn.classList.add('active');
