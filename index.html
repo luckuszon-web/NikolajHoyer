@@ -109,18 +109,18 @@
     .stat-label { font-size: 0.78rem; color: var(--gray); letter-spacing: 0.04em; }
 
     /* VETLING-STIL EDITORIAL SEKTIONER */
-    .editorial-scroll-container { position: relative; height: 400vh; }
-    .editorial-sticky {
-      position: sticky; top: 0; height: 100vh;
-      overflow: hidden; background: var(--bg);
-      border-top: 1px solid var(--light);
+    .editorial-scroll-container {
+      position: relative; height: 100vh; overflow: hidden;
+      border-top: 1px solid var(--light); background: var(--bg);
     }
+    .editorial-sticky { height: 100%; }
     .editorial {
       position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       display: flex; align-items: center;
       opacity: 0; pointer-events: none;
+      transition: opacity 0.7s ease;
     }
-    .editorial:first-child { opacity: 1; pointer-events: auto; }
+    .editorial.active { opacity: 1; pointer-events: auto; }
     .editorial-inner {
       display: grid; grid-template-columns: 1fr 1fr;
       width: 100%; align-items: center;
@@ -295,8 +295,8 @@
       .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
       /* EDITORIAL - mobil: normal scroll */
-      .editorial-scroll-container { height: auto; }
-      .editorial-sticky { position: relative; height: auto; overflow: visible; }
+      .editorial-scroll-container { height: auto; overflow: visible; border: none; }
+      .editorial-sticky { height: auto; }
       .editorial { position: relative; opacity: 1 !important; pointer-events: auto !important; border-top: 1px solid var(--light); height: auto; }
       .editorial-inner { grid-template-columns: 1fr; gap: 0; }
       .editorial-text, .editorial-text.right, .editorial-text.left { padding: 2.5rem 1.5rem; order: 2; }
@@ -931,38 +931,62 @@
       if (e.key === 'ArrowRight') lightboxNav(1);
     });
 
-    // Sticky editorial cross-fade
+    // Editorial scroll-hijack: siden stopper, sektioner skifter, siden fortsætter
     (function() {
       if (window.innerWidth < 900) return;
       var container = document.querySelector('.editorial-scroll-container');
       if (!container) return;
-      var sections = Array.from(container.querySelectorAll(':scope > .editorial-sticky > .editorial'));
+      var sections = Array.from(container.querySelectorAll('.editorial'));
       var n = sections.length;
       if (!n) return;
 
-      function update() {
-        var winH = window.innerHeight;
-        var scrolled = Math.max(0, -container.getBoundingClientRect().top);
-        // idx: 0 = sektion 1, 1 = sektion 2, osv.
-        var idx = scrolled / winH;
-        idx = Math.min(idx, n - 1);
+      var idx = 0;
+      var delta = 0;
+      var THRESH = 60;
 
-        var cur = Math.min(Math.floor(idx), n - 2);
-        var t = idx - cur; // 0→1 mellem cur og cur+1
-
-        sections.forEach(function(sec, i) {
-          var op = 0;
-          if (i === cur)     op = 1 - t;
-          else if (i === cur + 1) op = t;
-          else if (i === 0 && idx < 0) op = 1;
-          else if (i === n - 1 && idx >= n - 1) op = 1;
-          sec.style.opacity = op;
-          sec.style.pointerEvents = op > 0.3 ? 'auto' : 'none';
-        });
+      function goTo(i) {
+        sections[idx].classList.remove('active');
+        idx = i;
+        sections[idx].classList.add('active');
       }
 
-      window.addEventListener('scroll', update, { passive: true });
-      update();
+      function atBlock() {
+        var t = container.getBoundingClientRect().top;
+        return t > -5 && t < 5;
+      }
+
+      // Vis første sektion
+      sections[0].classList.add('active');
+
+      window.addEventListener('wheel', function(e) {
+        if (!atBlock()) { delta = 0; return; }
+
+        delta += e.deltaY;
+
+        if (e.deltaY > 0 && idx < n - 1) {
+          // Ruller ned og der er flere sektioner – stop siden
+          e.preventDefault();
+          if (delta >= THRESH) { delta = 0; goTo(idx + 1); }
+        } else if (e.deltaY < 0 && idx > 0) {
+          // Ruller op og der er tidligere sektioner – stop siden
+          e.preventDefault();
+          if (delta <= -THRESH) { delta = 0; goTo(idx - 1); }
+        } else {
+          delta = 0;
+        }
+      }, { passive: false });
+
+      // Touch-support
+      var ty = 0;
+      window.addEventListener('touchstart', function(e) {
+        ty = e.touches[0].clientY;
+      }, { passive: true });
+      window.addEventListener('touchmove', function(e) {
+        if (!atBlock()) return;
+        var diff = ty - e.touches[0].clientY;
+        if (diff > 40 && idx < n - 1) { e.preventDefault(); goTo(idx + 1); ty = e.touches[0].clientY; }
+        else if (diff < -40 && idx > 0) { e.preventDefault(); goTo(idx - 1); ty = e.touches[0].clientY; }
+      }, { passive: false });
     })();
 
     function toggleMobileMenu() {
