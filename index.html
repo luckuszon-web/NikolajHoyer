@@ -116,13 +116,11 @@
       border-top: 1px solid var(--light);
     }
     .editorial {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       display: flex; align-items: center;
       opacity: 0; pointer-events: none;
     }
-    /* Første sektion synlig som standard – JS overtager ved scroll */
-    .editorial-sticky .editorial:first-child { opacity: 1; pointer-events: auto; }
+    .editorial:first-child { opacity: 1; pointer-events: auto; }
     .editorial-inner {
       display: grid; grid-template-columns: 1fr 1fr;
       width: 100%; align-items: center;
@@ -296,10 +294,10 @@
       .services-grid { grid-template-columns: 1fr; gap: 1rem; }
       .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
-      /* EDITORIAL - mobil: normal scroll, ingen sticky */
+      /* EDITORIAL - mobil: normal scroll */
       .editorial-scroll-container { height: auto; }
       .editorial-sticky { position: relative; height: auto; overflow: visible; }
-      .editorial { position: relative; opacity: 1; pointer-events: auto; border-top: 1px solid var(--light); height: auto; }
+      .editorial { position: relative; opacity: 1 !important; pointer-events: auto !important; border-top: 1px solid var(--light); height: auto; }
       .editorial-inner { grid-template-columns: 1fr; gap: 0; }
       .editorial-text, .editorial-text.right, .editorial-text.left { padding: 2.5rem 1.5rem; order: 2; }
       .editorial-img { padding: 0; order: 1; }
@@ -933,72 +931,37 @@
       if (e.key === 'ArrowRight') lightboxNav(1);
     });
 
-    // Sticky editorial scroll med cross-fade
+    // Sticky editorial cross-fade
     (function() {
       if (window.innerWidth < 900) return;
-
       var container = document.querySelector('.editorial-scroll-container');
       if (!container) return;
-      var sections = Array.from(container.querySelectorAll('.editorial'));
+      var sections = Array.from(container.querySelectorAll(':scope > .editorial-sticky > .editorial'));
       var n = sections.length;
       if (!n) return;
 
-      var ticking = false;
-
       function update() {
         var winH = window.innerHeight;
-        var containerTop = container.getBoundingClientRect().top;
-        var containerH = container.offsetHeight;
-        var scrolled = -containerTop;
-        var maxScroll = containerH - winH;
+        var scrolled = Math.max(0, -container.getBoundingClientRect().top);
+        // idx: 0 = sektion 1, 1 = sektion 2, osv.
+        var idx = scrolled / winH;
+        idx = Math.min(idx, n - 1);
 
-        if (scrolled < 0) scrolled = 0;
-        if (scrolled > maxScroll) scrolled = maxScroll;
-
-        var progress = maxScroll > 0 ? scrolled / maxScroll : 0;
+        var cur = Math.min(Math.floor(idx), n - 2);
+        var t = idx - cur; // 0→1 mellem cur og cur+1
 
         sections.forEach(function(sec, i) {
-          var start = i / n;
-          var end = (i + 1) / n;
-          var fadeLen = 0.3 / n; // fade-zone per sektion
-          var opacity;
-
-          if (progress < start - fadeLen) {
-            opacity = i === 0 ? 1 : 0;
-          } else if (progress < start + fadeLen) {
-            opacity = i === 0 ? 1 : (progress - (start - fadeLen)) / (2 * fadeLen);
-          } else if (progress < end - fadeLen) {
-            opacity = 1;
-          } else if (progress < end + fadeLen) {
-            opacity = i === n - 1 ? 1 : 1 - (progress - (end - fadeLen)) / (2 * fadeLen);
-          } else {
-            opacity = i === n - 1 ? 1 : 0;
-          }
-
-          opacity = Math.max(0, Math.min(1, opacity));
-          sec.style.opacity = opacity;
-          sec.style.pointerEvents = opacity > 0.4 ? 'auto' : 'none';
-
-          var img = sec.querySelector('.editorial-img img');
-          if (img) {
-            var local = Math.max(0, Math.min(1, (progress - start) / (1 / n)));
-            img.style.transform = 'scale(1.08) translateY(' + ((local - 0.5) * 40) + 'px)';
-          }
+          var op = 0;
+          if (i === cur)     op = 1 - t;
+          else if (i === cur + 1) op = t;
+          else if (i === 0 && idx < 0) op = 1;
+          else if (i === n - 1 && idx >= n - 1) op = 1;
+          sec.style.opacity = op;
+          sec.style.pointerEvents = op > 0.3 ? 'auto' : 'none';
         });
-
-        ticking = false;
       }
 
-      window.addEventListener('scroll', function() {
-        if (!ticking) { requestAnimationFrame(update); ticking = true; }
-      }, { passive: true });
-
-      window.addEventListener('resize', function() {
-        if (window.innerWidth < 900) {
-          sections.forEach(function(s) { s.style.opacity = ''; s.style.pointerEvents = ''; });
-        }
-      });
-
+      window.addEventListener('scroll', update, { passive: true });
       update();
     })();
 
