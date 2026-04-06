@@ -136,16 +136,26 @@
       background: transparent;
       display: flex; align-items: center; justify-content: center;
       position: relative; padding: 2.5rem;
+      overflow: hidden;
     }
     .editorial-img img {
       width: 100%; height: 360px;
       object-fit: cover; display: block;
       border-radius: 20px;
       box-shadow: 0 8px 32px rgba(42,33,24,0.12);
-      transition: box-shadow 0.3s ease;
+      transition: box-shadow 0.3s ease, transform 0.1s linear;
+      will-change: transform;
+      transform: scale(1.08) translateY(0px);
     }
     .editorial-img img:hover {
       box-shadow: 0 20px 60px rgba(42,33,24,0.24);
+    }
+    .editorial {
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .editorial.fade-out {
+      opacity: 0;
+      transform: translateY(-20px);
     }
     .editorial-bullets {
       margin-top: 2rem; list-style: none;
@@ -908,6 +918,44 @@
       if (e.key === 'ArrowLeft') lightboxNav(-1);
       if (e.key === 'ArrowRight') lightboxNav(1);
     });
+
+    // Parallax + fade for editorial sections
+    (function() {
+      var editorials = document.querySelectorAll('.editorial');
+      var ticking = false;
+
+      function updateParallax() {
+        var winH = window.innerHeight;
+        editorials.forEach(function(section) {
+          var rect = section.getBoundingClientRect();
+          var img = section.querySelector('.editorial-img img');
+
+          // Parallax: image drifter langsomt mens siden ruller
+          if (img) {
+            var relPos = (rect.top + rect.height / 2) / winH - 0.5; // -0.5 til 0.5
+            var shift = relPos * 40; // max 40px bevægelse
+            img.style.transform = 'scale(1.08) translateY(' + shift + 'px)';
+          }
+
+          // Fade-out: sektion toner ud når den forlader viewport opad
+          var leaveProgress = -rect.bottom / (winH * 0.25);
+          var opacity = Math.max(0, Math.min(1, 1 - leaveProgress));
+          var translateY = Math.max(0, leaveProgress * 20);
+          section.style.opacity = opacity;
+          section.style.transform = 'translateY(-' + translateY + 'px)';
+        });
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      updateParallax();
+    })();
 
     function toggleMobileMenu() {
       var btn = document.getElementById('hamburger');
