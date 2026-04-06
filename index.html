@@ -120,9 +120,9 @@
       width: 100%; height: 100%;
       display: flex; align-items: center;
       opacity: 0; pointer-events: none;
-      transition: none;
     }
-    .editorial.is-active { opacity: 1; pointer-events: auto; }
+    /* Første sektion synlig som standard – JS overtager ved scroll */
+    .editorial-sticky .editorial:first-child { opacity: 1; pointer-events: auto; }
     .editorial-inner {
       display: grid; grid-template-columns: 1fr 1fr;
       width: 100%; align-items: center;
@@ -935,68 +935,69 @@
 
     // Sticky editorial scroll med cross-fade
     (function() {
+      if (window.innerWidth < 900) return;
+
       var container = document.querySelector('.editorial-scroll-container');
-      var sections = container ? Array.from(container.querySelectorAll('.editorial')) : [];
+      if (!container) return;
+      var sections = Array.from(container.querySelectorAll('.editorial'));
       var n = sections.length;
-      if (!container || !n || window.innerWidth < 900) return;
+      if (!n) return;
 
       var ticking = false;
 
       function update() {
-        var rect = container.getBoundingClientRect();
         var winH = window.innerHeight;
-        var scrolled = -rect.top;
-        var maxScroll = container.offsetHeight - winH;
+        var containerTop = container.getBoundingClientRect().top;
+        var containerH = container.offsetHeight;
+        var scrolled = -containerTop;
+        var maxScroll = containerH - winH;
 
-        // Klem scrolled til gyldig range
         if (scrolled < 0) scrolled = 0;
         if (scrolled > maxScroll) scrolled = maxScroll;
 
-        // Progress 0→1 delt ligeligt mellem n sektioner
-        var progress = scrolled / maxScroll; // 0 til 1
-        var sectionSpan = 1 / n;
-        var fadeZone = 0.25; // 25% af sektionens span bruges på cross-fade
+        var progress = maxScroll > 0 ? scrolled / maxScroll : 0;
 
         sections.forEach(function(sec, i) {
-          var start = i * sectionSpan;
-          var end = (i + 1) * sectionSpan;
-          var fadeInEnd = start + sectionSpan * fadeZone;
-          var fadeOutStart = end - sectionSpan * fadeZone;
+          var start = i / n;
+          var end = (i + 1) / n;
+          var fadeLen = 0.3 / n; // fade-zone per sektion
           var opacity;
 
-          if (progress <= start) {
-            opacity = (i === 0) ? 1 : 0;
-          } else if (progress <= fadeInEnd) {
-            opacity = (i === 0) ? 1 : (progress - start) / (fadeInEnd - start);
-          } else if (progress <= fadeOutStart) {
+          if (progress < start - fadeLen) {
+            opacity = i === 0 ? 1 : 0;
+          } else if (progress < start + fadeLen) {
+            opacity = i === 0 ? 1 : (progress - (start - fadeLen)) / (2 * fadeLen);
+          } else if (progress < end - fadeLen) {
             opacity = 1;
-          } else if (progress <= end) {
-            opacity = (i === n - 1) ? 1 : 1 - (progress - fadeOutStart) / (end - fadeOutStart);
+          } else if (progress < end + fadeLen) {
+            opacity = i === n - 1 ? 1 : 1 - (progress - (end - fadeLen)) / (2 * fadeLen);
           } else {
-            opacity = (i === n - 1) ? 1 : 0;
+            opacity = i === n - 1 ? 1 : 0;
           }
 
+          opacity = Math.max(0, Math.min(1, opacity));
           sec.style.opacity = opacity;
-          sec.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
+          sec.style.pointerEvents = opacity > 0.4 ? 'auto' : 'none';
 
-          // Parallax på billedet indenfor sektionens range
           var img = sec.querySelector('.editorial-img img');
           if (img) {
-            var localProgress = Math.max(0, Math.min(1, (progress - start) / sectionSpan));
-            var shift = (localProgress - 0.5) * 40;
-            img.style.transform = 'scale(1.08) translateY(' + shift + 'px)';
+            var local = Math.max(0, Math.min(1, (progress - start) / (1 / n)));
+            img.style.transform = 'scale(1.08) translateY(' + ((local - 0.5) * 40) + 'px)';
           }
         });
 
         ticking = false;
       }
 
-      // Initialiser første sektion synlig
-      if (sections[0]) sections[0].style.opacity = 1;
-
       window.addEventListener('scroll', function() {
         if (!ticking) { requestAnimationFrame(update); ticking = true; }
       }, { passive: true });
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth < 900) {
+          sections.forEach(function(s) { s.style.opacity = ''; s.style.pointerEvents = ''; });
+        }
+      });
 
       update();
     })();
