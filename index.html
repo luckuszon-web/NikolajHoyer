@@ -109,18 +109,7 @@
     .stat-label { font-size: 0.78rem; color: var(--gray); letter-spacing: 0.04em; }
 
     /* VETLING-STIL EDITORIAL SEKTIONER */
-    .editorial-scroll-container {
-      position: relative; height: 100vh; overflow: hidden;
-      border-top: 1px solid var(--light); background: var(--bg);
-    }
-    .editorial-sticky { height: 100%; }
-    .editorial {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      display: flex; align-items: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.7s ease;
-    }
-    .editorial.active { opacity: 1; pointer-events: auto; }
+    .editorial { border-top: 1px solid var(--light); overflow: hidden; }
     .editorial-inner {
       display: grid; grid-template-columns: 1fr 1fr;
       width: 100%; align-items: center;
@@ -294,10 +283,8 @@
       .services-grid { grid-template-columns: 1fr; gap: 1rem; }
       .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
-      /* EDITORIAL - mobil: normal scroll */
-      .editorial-scroll-container { height: auto; overflow: visible; border: none; }
-      .editorial-sticky { height: auto; }
-      .editorial { position: relative; opacity: 1 !important; pointer-events: auto !important; border-top: 1px solid var(--light); height: auto; }
+      /* EDITORIAL */
+      .editorial { overflow: hidden; }
       .editorial-inner { grid-template-columns: 1fr; gap: 0; }
       .editorial-text, .editorial-text.right, .editorial-text.left { padding: 2.5rem 1.5rem; order: 2; }
       .editorial-img { padding: 0; order: 1; }
@@ -422,97 +409,90 @@
     </div>
   </section>
 
-  <!-- EDITORIAL SCROLL BLOCK -->
-  <div class="editorial-scroll-container" id="om">
-    <div class="editorial-sticky">
-
-      <!-- HÅNDVÆRK -->
-      <section class="editorial">
-        <div class="editorial-inner">
-          <div class="editorial-text left">
-            <span class="editorial-category">Specialiseret tømrer</span>
-            <h2 class="editorial-title">Tømrerarbejde med fokus på det udendørs</h2>
-            <div class="editorial-body">
-              <p>Nikolaj Høyer er tømrermester med speciale i terrasser og hegn. Arbejdet bygger på solidt håndværk, høj kvalitet og æstetik – udført med omhu og øje for detaljen.</p>
-              <p>Gennem tæt dialog med kunden sikres løsninger, der respekterer både ejendommen og helheden. Ingen løse vikarer – du ved altid hvem der møder op.</p>
-            </div>
-            <ul class="editorial-bullets">
-              <li>Håndværk</li>
-              <li>Kvalitet</li>
-              <li>Æstetik</li>
-              <li>Dialog</li>
-            </ul>
-            <p style="margin-top:2.5rem"><a href="#kontakt" class="btn-primary">Kontakt</a></p>
-          </div>
-          <div class="editorial-img">
-            <img src="images/editorial-1.jpeg" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Tømrerarbejde af Nikolaj Høyer">
-          </div>
+  <!-- HÅNDVÆRK -->
+  <section class="editorial" id="om">
+    <div class="editorial-inner">
+      <div class="editorial-text left reveal">
+        <span class="editorial-category">Specialiseret tømrer</span>
+        <h2 class="editorial-title">Tømrerarbejde med fokus på det udendørs</h2>
+        <div class="editorial-body">
+          <p>Nikolaj Høyer er tømrermester med speciale i terrasser og hegn. Arbejdet bygger på solidt håndværk, høj kvalitet og æstetik – udført med omhu og øje for detaljen.</p>
+          <p>Gennem tæt dialog med kunden sikres løsninger, der respekterer både ejendommen og helheden. Ingen løse vikarer – du ved altid hvem der møder op.</p>
         </div>
-      </section>
-
-      <!-- KVALITET -->
-      <section class="editorial">
-        <div class="editorial-inner">
-          <div class="editorial-img">
-            <img src="images/editorial-2.jpeg" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Tømrerarbejde af Nikolaj Høyer">
-          </div>
-          <div class="editorial-text right">
-            <span class="editorial-category">Materialer & holdbarhed</span>
-            <h2 class="editorial-title">Bygget til at holde. Af folk der ved hvordan.</h2>
-            <div class="editorial-body">
-              <p>Kvalitet er et grundlæggende princip i alt, hvad Nikolaj laver. Hvert projekt udføres med fokus på korrekt opbygning, præcise samlinger og materialer, der holder – både teknisk og æstetisk.</p>
-              <p>Der gås ikke på kompromis. Uanset opgavens størrelse er ambitionen den samme: at levere tømrerarbejde med højt finish og lang levetid.</p>
-            </div>
-            <p style="margin-top:2.5rem"><a href="#kontakt" class="btn-primary">Få et tilbud</a></p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ÆSTETIK -->
-      <section class="editorial">
-        <div class="editorial-inner">
-          <div class="editorial-text left">
-            <span class="editorial-category">Finish & udseende</span>
-            <h2 class="editorial-title">Respekt for detaljer og omgivelser</h2>
-            <div class="editorial-body">
-              <p>Æstetik spiller en afgørende rolle. Terrasser og hegn udføres med respekt for ejendommens udtryk, materialer og proportioner – så det færdige resultat fremstår naturligt og gennemført.</p>
-              <p>Det handler om detaljer, sammenhænge og finish. Nikolaj sikrer, at løsningen understøtter husets udtryk frem for at overdøve det.</p>
-            </div>
-            <div class="materials-grid" style="margin-top:2rem">
-              <span class="material-tag">Douglas-fyr</span>
-              <span class="material-tag">Lærketræ</span>
-              <span class="material-tag">Bangkirai</span>
-              <span class="material-tag">Thermotræ</span>
-              <span class="material-tag">Komposit</span>
-              <span class="material-tag">FSC-certificeret</span>
-            </div>
-          </div>
-          <div class="editorial-img">
-            <img src="images/editorial-3.jpeg" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Tømrerarbejde af Nikolaj Høyer">
-          </div>
-        </div>
-      </section>
-
-      <!-- DIALOG -->
-      <section class="editorial">
-        <div class="editorial-inner">
-          <div class="editorial-img">
-            <img src="images/editorial-4.jpeg" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Tømrerarbejde af Nikolaj Høyer">
-          </div>
-          <div class="editorial-text right">
-            <span class="editorial-category">Fra idé til aflevering</span>
-            <h2 class="editorial-title">Et tæt samarbejde hele vejen</h2>
-            <div class="editorial-body">
-              <p>Godt håndværk starter med god dialog. Nikolaj prioriterer et tæt samarbejde med kunden gennem hele processen – fra første besigtigelse til afleveringen.</p>
-              <p>Der tages tid til at forstå ønsker og behov, og alle beslutninger træffes på et oplyst grundlag. Det skaber ro i processen og et resultat, der lever op til forventningerne.</p>
-            </div>
-            <p style="margin-top:2.5rem"><a href="#kontakt" class="btn-primary">Start en dialog</a></p>
-          </div>
-        </div>
-      </section>
-
+        <ul class="editorial-bullets">
+          <li>Håndværk</li>
+          <li>Kvalitet</li>
+          <li>Æstetik</li>
+          <li>Dialog</li>
+        </ul>
+        <p style="margin-top:2.5rem"><a href="#kontakt" class="btn-primary">Kontakt</a></p>
+      </div>
+      <div class="editorial-img reveal">
+        <img src="images/editorial-1.jpeg" alt="Tømrerarbejde af Nikolaj Høyer">
+      </div>
     </div>
-  </div>
+  </section>
+
+  <!-- KVALITET -->
+  <section class="editorial">
+    <div class="editorial-inner">
+      <div class="editorial-img reveal">
+        <img src="images/editorial-2.jpeg" alt="Tømrerarbejde af Nikolaj Høyer">
+      </div>
+      <div class="editorial-text right reveal">
+        <span class="editorial-category">Materialer & holdbarhed</span>
+        <h2 class="editorial-title">Bygget til at holde. Af folk der ved hvordan.</h2>
+        <div class="editorial-body">
+          <p>Kvalitet er et grundlæggende princip i alt, hvad Nikolaj laver. Hvert projekt udføres med fokus på korrekt opbygning, præcise samlinger og materialer, der holder – både teknisk og æstetisk.</p>
+          <p>Der gås ikke på kompromis. Uanset opgavens størrelse er ambitionen den samme: at levere tømrerarbejde med højt finish og lang levetid.</p>
+        </div>
+        <p style="margin-top:2.5rem"><a href="#kontakt" class="btn-primary">Få et tilbud</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÆSTETIK -->
+  <section class="editorial">
+    <div class="editorial-inner">
+      <div class="editorial-text left reveal">
+        <span class="editorial-category">Finish & udseende</span>
+        <h2 class="editorial-title">Respekt for detaljer og omgivelser</h2>
+        <div class="editorial-body">
+          <p>Æstetik spiller en afgørende rolle. Terrasser og hegn udføres med respekt for ejendommens udtryk, materialer og proportioner – så det færdige resultat fremstår naturligt og gennemført.</p>
+          <p>Det handler om detaljer, sammenhænge og finish. Nikolaj sikrer, at løsningen understøtter husets udtryk frem for at overdøve det.</p>
+        </div>
+        <div class="materials-grid" style="margin-top:2rem">
+          <span class="material-tag">Douglas-fyr</span>
+          <span class="material-tag">Lærketræ</span>
+          <span class="material-tag">Bangkirai</span>
+          <span class="material-tag">Thermotræ</span>
+          <span class="material-tag">Komposit</span>
+          <span class="material-tag">FSC-certificeret</span>
+        </div>
+      </div>
+      <div class="editorial-img reveal">
+        <img src="images/editorial-3.jpeg" alt="Tømrerarbejde af Nikolaj Høyer">
+      </div>
+    </div>
+  </section>
+
+  <!-- DIALOG -->
+  <section class="editorial">
+    <div class="editorial-inner">
+      <div class="editorial-img reveal">
+        <img src="images/editorial-4.jpeg" alt="Tømrerarbejde af Nikolaj Høyer">
+      </div>
+      <div class="editorial-text right reveal">
+        <span class="editorial-category">Fra idé til aflevering</span>
+        <h2 class="editorial-title">Et tæt samarbejde hele vejen</h2>
+        <div class="editorial-body">
+          <p>Godt håndværk starter med god dialog. Nikolaj prioriterer et tæt samarbejde med kunden gennem hele processen – fra første besigtigelse til afleveringen.</p>
+          <p>Der tages tid til at forstå ønsker og behov, og alle beslutninger træffes på et oplyst grundlag. Det skaber ro i processen og et resultat, der lever op til forventningerne.</p>
+        </div>
+        <p style="margin-top:2.5rem"><a href="#kontakt" class="btn-primary">Start en dialog</a></p>
+      </div>
+    </div>
+  </section>
 
   <section class="section prisberegner" id="prisberegner">
     <div class="reveal">
@@ -931,62 +911,19 @@
       if (e.key === 'ArrowRight') lightboxNav(1);
     });
 
-    // Editorial scroll-hijack: siden stopper, sektioner skifter, siden fortsætter
+    // Parallax på editorial billeder
     (function() {
-      if (window.innerWidth < 900) return;
-      var container = document.querySelector('.editorial-scroll-container');
-      if (!container) return;
-      var sections = Array.from(container.querySelectorAll('.editorial'));
-      var n = sections.length;
-      if (!n) return;
-
-      var idx = 0;
-      var delta = 0;
-      var THRESH = 60;
-
-      function goTo(i) {
-        sections[idx].classList.remove('active');
-        idx = i;
-        sections[idx].classList.add('active');
+      var imgs = document.querySelectorAll('.editorial-img img');
+      if (!imgs.length) return;
+      function update() {
+        imgs.forEach(function(img) {
+          var rect = img.closest('.editorial').getBoundingClientRect();
+          var center = rect.top + rect.height / 2 - window.innerHeight / 2;
+          img.style.transform = 'scale(1.08) translateY(' + (center * 0.06) + 'px)';
+        });
       }
-
-      function atBlock() {
-        var t = container.getBoundingClientRect().top;
-        return t > -5 && t < 5;
-      }
-
-      // Vis første sektion
-      sections[0].classList.add('active');
-
-      window.addEventListener('wheel', function(e) {
-        if (!atBlock()) { delta = 0; return; }
-
-        delta += e.deltaY;
-
-        if (e.deltaY > 0 && idx < n - 1) {
-          // Ruller ned og der er flere sektioner – stop siden
-          e.preventDefault();
-          if (delta >= THRESH) { delta = 0; goTo(idx + 1); }
-        } else if (e.deltaY < 0 && idx > 0) {
-          // Ruller op og der er tidligere sektioner – stop siden
-          e.preventDefault();
-          if (delta <= -THRESH) { delta = 0; goTo(idx - 1); }
-        } else {
-          delta = 0;
-        }
-      }, { passive: false });
-
-      // Touch-support
-      var ty = 0;
-      window.addEventListener('touchstart', function(e) {
-        ty = e.touches[0].clientY;
-      }, { passive: true });
-      window.addEventListener('touchmove', function(e) {
-        if (!atBlock()) return;
-        var diff = ty - e.touches[0].clientY;
-        if (diff > 40 && idx < n - 1) { e.preventDefault(); goTo(idx + 1); ty = e.touches[0].clientY; }
-        else if (diff < -40 && idx > 0) { e.preventDefault(); goTo(idx - 1); ty = e.touches[0].clientY; }
-      }, { passive: false });
+      window.addEventListener('scroll', update, { passive: true });
+      update();
     })();
 
     function toggleMobileMenu() {
