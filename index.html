@@ -884,6 +884,7 @@
 
     // Services carousel
     let svcIdx = 0;
+    let svcTimer = null;
     function svcVisible() {
       return window.innerWidth > 900 ? 3 : window.innerWidth > 540 ? 2 : 1;
     }
@@ -892,14 +893,32 @@
       const total = track.children.length;
       const visible = svcVisible();
       const max = total - visible;
-      svcIdx = Math.max(0, Math.min(svcIdx + dir, max));
+      if (dir === 1 && svcIdx >= max) { svcIdx = 0; }
+      else { svcIdx = Math.max(0, Math.min(svcIdx + dir, max)); }
       const card = track.children[0];
       const gap = 24;
       track.style.transform = 'translateX(-' + (svcIdx * (card.offsetWidth + gap)) + 'px)';
       document.getElementById('svc-prev').disabled = svcIdx === 0;
       document.getElementById('svc-next').disabled = svcIdx >= max;
     }
+    function svcStartAuto() {
+      svcTimer = setInterval(function() { svcCarousel(1); }, 3000);
+    }
+    function svcStopAuto() {
+      clearInterval(svcTimer);
+    }
+    // Pause on hover/touch, resume on leave
+    document.querySelector('.services-carousel').addEventListener('mouseenter', svcStopAuto);
+    document.querySelector('.services-carousel').addEventListener('mouseleave', svcStartAuto);
+    document.querySelector('.services-carousel').addEventListener('touchstart', svcStopAuto, { passive: true });
+    document.querySelector('.services-carousel').addEventListener('touchend', function() {
+      setTimeout(svcStartAuto, 4000);
+    }, { passive: true });
+    // Manual buttons reset timer
+    document.getElementById('svc-prev').addEventListener('click', function() { svcStopAuto(); svcStartAuto(); });
+    document.getElementById('svc-next').addEventListener('click', function() { svcStopAuto(); svcStartAuto(); });
     window.addEventListener('resize', function() { svcIdx = 0; svcCarousel(0); });
+    svcStartAuto();
 
     let calcType = 'terrasse';
     const traesorter = ['Imprægneret gran','Douglas-fyr','Thermotræ','Bangkirai'];
