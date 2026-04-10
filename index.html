@@ -903,7 +903,7 @@
     }
     function svcResetTimer() {
       clearInterval(svcTimer);
-      svcTimer = setInterval(function() { svcCarousel(1); }, 3000);
+      svcTimer = setInterval(function() { svcCarousel(1); }, 8000);
     }
     // Pause on hover (desktop), resume on leave
     document.querySelector('.services-carousel').addEventListener('mouseenter', function() { clearInterval(svcTimer); });
