@@ -132,7 +132,25 @@
     /* YDELSER */
     .services { background: var(--bg); border-top: 1px solid var(--light); }
     .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
-    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .services-carousel { position: relative; display: flex; align-items: stretch; gap: 1rem; }
+    .carousel-viewport { overflow: hidden; flex: 1; min-width: 0; }
+    .carousel-track { display: flex; gap: 1.5rem; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+    .carousel-track .service-card { flex: 0 0 calc((100% - 3rem) / 3); min-width: 0; }
+    .carousel-btn {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--light);
+      background: var(--bg2);
+      color: var(--black);
+      font-size: 1.1rem;
+      cursor: pointer;
+      align-self: center;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .carousel-btn:hover { border-color: #C4A882; background: #f5ede2; }
+    .carousel-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
     .service-card {
       background: var(--bg2);
       border: 1px solid var(--light);
@@ -308,6 +326,8 @@
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 900px) {
+      .carousel-track .service-card { flex: 0 0 calc((100% - 1.5rem) / 2); }
+
       /* NAV */
       nav { padding: 1rem 1.5rem; }
       .nav-links, .nav-cta { display: none; }
@@ -368,6 +388,8 @@
       .hero { padding: 6rem 1.2rem 3.5rem; }
       .section { padding: 3.5rem 1.2rem; }
       .service-card { padding: 1.8rem 1.5rem; }
+      .carousel-track .service-card { flex: 0 0 100%; }
+      .carousel-btn { width: 36px; height: 36px; font-size: 0.9rem; }
       nav { padding: 0.9rem 1.2rem; }
     }
   </style>
@@ -422,40 +444,66 @@
         <span class="section-label">Hvad jeg laver</span>
         <h2 class="section-title">Specialiseret i det udendørs</h2>
       </div>
-      <p class="section-sub">To kerneydelser – begge udført med samme omhu og sans for detaljen.</p>
+      <p class="section-sub">Solidt håndværk på tværs af alle ydelser – udendørs som indendørs.</p>
     </div>
-    <div class="services-grid reveal">
-      <div class="service-card">
-        <h3>Terrasser</h3>
-        <p>En velbygget terrasse er forlængelsen af dit hjem. Jeg planlægger, tegner og opbygger din terrasse fra bund til dæk – med fokus på holdbarhed, dræn og æstetik.</p>
-        <ul>
-          <li>Nyt terrassedæk fra bunden</li>
-          <li>Renovering af eksisterende terrasse</li>
-          <li>Komposit eller naturligt træ</li>
-          <li>Integreret belysning & gelænder</li>
-          <li>Hævet terrasse & repos</li>
-        </ul>
+    <div class="services-carousel reveal">
+      <button class="carousel-btn carousel-prev" id="svc-prev" onclick="svcCarousel(-1)" aria-label="Forrige" disabled>&#8592;</button>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="svc-track">
+          <div class="service-card">
+            <h3>Terrasser & Hegn</h3>
+            <p>Forlæng dit hjem udendørs med en velbygget terrasse eller et hegn der passer til ejendommens udtryk. Fra simpel firkant til hævet dæk med gelænder og låge.</p>
+            <ul>
+              <li>Nyt terrassedæk fra bunden</li>
+              <li>Hævet terrasse & repos</li>
+              <li>Plankeværk & lamelværk</li>
+              <li>Porte & låger</li>
+              <li>Vindhegn & afskærmning</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>Carporte, Skure & Udestuer</h3>
+            <p>Skræddersyede konstruktioner der giver ekstra plads og funktionalitet – fra den praktiske carport til den hyggelige udestue.</p>
+            <ul>
+              <li>Carporte i træ</li>
+              <li>Haveskure og redskabsrum</li>
+              <li>Udestuer og overdækninger</li>
+              <li>Pergola og terrasseoverdækning</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>Renovering & Vedligehold</h3>
+            <p>Vedligeholdelse forlænger levetiden markant. Rådne brædder, slidt terrassedæk eller et hegn der trænger til opmærksomhed – jeg klarer det.</p>
+            <ul>
+              <li>Udskiftning af rådne brædder</li>
+              <li>Terrassebehandling & oliering</li>
+              <li>Hegnreparation</li>
+              <li>Generel tømrerreparation</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>Døre, Vinduer & Facade</h3>
+            <p>Korrekt montering sikrer tæthed, isolering og et pænt udtryk. Jeg skifter og monterer døre, vinduer og facadebeklædning med præcision.</p>
+            <ul>
+              <li>Udskiftning af hoveddøre</li>
+              <li>Vinduesudskiftning</li>
+              <li>Facadebrædder & beklædning</li>
+              <li>Tætning & fugt­sikring</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h3>Specialopgaver & Indendørs</h3>
+            <p>Indvendigt tømrerarbejde der løfter boligens udtryk – fra hylder og garderober til trapper og skræddersyet indretning.</p>
+            <ul>
+              <li>Hylder, skabe & garderober</li>
+              <li>Trapper & gelændere</li>
+              <li>Gulve & lister</li>
+              <li>Specialbyggeri efter mål</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="service-card">
-        <h3>Hegn & Afskærmning</h3>
-        <p>Et godt hegn giver privatlivets fred og definerer dit udeareal. Jeg tilpasser hegnet til din grund og dine ønsker – fra klassisk plankeværk til moderne lodrette lister.</p>
-        <ul>
-          <li>Plankeværk & lamelværk</li>
-          <li>Lodrette & vandrette varianter</li>
-          <li>Porte & låger</li>
-          <li>Vindhegn og pergola</li>
-          <li>Nedrivning af gammelt hegn</li>
-        </ul>
-      </div>
-      <div class="service-card">
-        <h3>Øvrig tømrerarbejde</h3>
-        <p>Udover mine specialer hjælper jeg med alt det praktiske tømrerarbejde, der hører til ejendommen – indvendigt som udvendigt.</p>
-        <ul>
-          <li>Carporte & skure</li>
-          <li>Udestuer & overdækninger</li>
-          <li>Reparationer & vedligehold</li>
-        </ul>
-      </div>
+      <button class="carousel-btn carousel-next" id="svc-next" onclick="svcCarousel(1)" aria-label="Næste">&#8594;</button>
     </div>
   </section>
 
@@ -854,6 +902,25 @@
         if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
       });
     });
+
+    // Services carousel
+    let svcIdx = 0;
+    function svcVisible() {
+      return window.innerWidth > 900 ? 3 : window.innerWidth > 540 ? 2 : 1;
+    }
+    function svcCarousel(dir) {
+      const track = document.getElementById('svc-track');
+      const total = track.children.length;
+      const visible = svcVisible();
+      const max = total - visible;
+      svcIdx = Math.max(0, Math.min(svcIdx + dir, max));
+      const card = track.children[0];
+      const gap = 24;
+      track.style.transform = 'translateX(-' + (svcIdx * (card.offsetWidth + gap)) + 'px)';
+      document.getElementById('svc-prev').disabled = svcIdx === 0;
+      document.getElementById('svc-next').disabled = svcIdx >= max;
+    }
+    window.addEventListener('resize', function() { svcIdx = 0; svcCarousel(0); });
 
     let calcType = 'terrasse';
     const traesorter = ['Imprægneret gran','Douglas-fyr','Thermotræ','Bangkirai'];
