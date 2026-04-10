@@ -901,24 +901,18 @@
       document.getElementById('svc-prev').disabled = svcIdx === 0;
       document.getElementById('svc-next').disabled = svcIdx >= max;
     }
-    function svcStartAuto() {
+    function svcResetTimer() {
+      clearInterval(svcTimer);
       svcTimer = setInterval(function() { svcCarousel(1); }, 3000);
     }
-    function svcStopAuto() {
-      clearInterval(svcTimer);
-    }
-    // Pause on hover/touch, resume on leave
-    document.querySelector('.services-carousel').addEventListener('mouseenter', svcStopAuto);
-    document.querySelector('.services-carousel').addEventListener('mouseleave', svcStartAuto);
-    document.querySelector('.services-carousel').addEventListener('touchstart', svcStopAuto, { passive: true });
-    document.querySelector('.services-carousel').addEventListener('touchend', function() {
-      setTimeout(svcStartAuto, 4000);
-    }, { passive: true });
+    // Pause on hover (desktop), resume on leave
+    document.querySelector('.services-carousel').addEventListener('mouseenter', function() { clearInterval(svcTimer); });
+    document.querySelector('.services-carousel').addEventListener('mouseleave', svcResetTimer);
     // Manual buttons reset timer
-    document.getElementById('svc-prev').addEventListener('click', function() { svcStopAuto(); svcStartAuto(); });
-    document.getElementById('svc-next').addEventListener('click', function() { svcStopAuto(); svcStartAuto(); });
+    document.getElementById('svc-prev').addEventListener('click', svcResetTimer);
+    document.getElementById('svc-next').addEventListener('click', svcResetTimer);
     window.addEventListener('resize', function() { svcIdx = 0; svcCarousel(0); });
-    svcStartAuto();
+    svcResetTimer();
 
     let calcType = 'terrasse';
     const traesorter = ['Imprægneret gran','Douglas-fyr','Thermotræ','Bangkirai'];
