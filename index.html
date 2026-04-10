@@ -854,16 +854,16 @@
           <div class="contact-item"><div class="contact-item-label">Åbningstider</div><div class="contact-item-val">Man–Fre: 7–17</div></div>
         </div>
       </div>
-      <div class="contact-form reveal">
+      <form class="contact-form reveal" action="https://formspree.io/f/xdaprqgz" method="POST">
         <div class="form-row">
-          <input type="text" placeholder="Dit navn"/>
-          <input type="tel" placeholder="Telefonnummer"/>
+          <input type="text" name="navn" placeholder="Dit navn" required/>
+          <input type="tel" name="telefon" placeholder="Telefonnummer"/>
         </div>
-        <input type="email" placeholder="Email adresse"/>
-        <select><option value="" disabled selected>Hvad handler det om?</option><option value="terrasse">Terrasse</option><option value="hegn">Hegn & afskærmning</option><option value="andet">Andet tømrerarbejde</option></select>
-        <textarea placeholder="Beskriv kort hvad du ønsker – areal, materiale, ønsket tidsramme..."></textarea>
-        <button class="btn-primary" type="button">Send besked →</button>
-      </div>
+        <input type="email" name="email" placeholder="Email adresse" required/>
+        <select name="emne"><option value="" disabled selected>Hvad handler det om?</option><option value="terrasse">Terrasse</option><option value="hegn">Hegn & afskærmning</option><option value="andet">Andet tømrerarbejde</option></select>
+        <textarea name="besked" placeholder="Beskriv kort hvad du ønsker – areal, materiale, ønsket tidsramme..."></textarea>
+        <button class="btn-primary" type="submit">Send besked →</button>
+      </form>
     </div>
   </section>
 
