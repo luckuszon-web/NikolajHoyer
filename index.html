@@ -605,9 +605,9 @@
               <div class="c-slider-sub">Terrassens samlede flade</div>
             </div>
             <div class="c-slider-row">
-              <div class="c-slider-top"><span class="c-slider-label">Træsort</span><span class="c-slider-val" id="c-traesort-out">Douglas-fyr</span></div>
-              <input type="range" class="c-range" id="c-traesort" min="0" max="3" step="1" value="1" oninput="calcUpdate()">
-              <div class="c-tag-row" id="c-traetags"><span class="c-tag">Imprægneret gran</span><span class="c-tag active">Douglas-fyr</span><span class="c-tag">Thermotræ</span><span class="c-tag">Bangkirai</span></div>
+              <div class="c-slider-top"><span class="c-slider-label">Træsort</span><span class="c-slider-val" id="c-traesort-out">Trykimprægneret fyr</span></div>
+              <input type="range" class="c-range" id="c-traesort" min="0" max="4" step="1" value="0" oninput="calcUpdate()">
+              <div class="c-tag-row" id="c-traetags"><span class="c-tag active">Trykimp. fyr</span><span class="c-tag">Thermofyr</span><span class="c-tag">Jatoba</span><span class="c-tag">Cumaru</span><span class="c-tag">Ipé</span></div>
             </div>
             <div class="c-slider-row">
               <div class="c-slider-top"><span class="c-slider-label">Kompleksitet</span><span class="c-slider-val" id="c-komplex-out">Standard</span></div>
@@ -654,15 +654,9 @@
           </div>
         </div>
         <div class="calc-result">
-          <span class="result-label-sm">Estimeret pris inkl. moms</span>
+          <span class="result-label-sm">Fra pris inkl. moms</span>
           <div class="result-total" id="c-total">–</div>
-          <div class="result-sub-row">
-            <div><span class="result-label-sm">Materialer</span><div class="result-sub-val" id="c-mat">–</div></div>
-            <div><span class="result-label-sm">Arbejdsløn</span><div class="result-sub-val" id="c-arb">–</div></div>
-          </div>
-          <hr class="result-divider">
-          <div id="c-breakdown"></div>
-          <p class="calc-note">Vejledende estimat. Endelig pris afhænger af adgangsforhold, jordbund og konkrete materialevalg.</p>
+          <p class="calc-note" style="margin-top:1.5rem">Dette er en vejledende minimumspris. Den endelige pris afhænger af adgangsforhold, jordbund, valg af materialer og projektets kompleksitet. Kontakt os for et præcist og gratis tilbud.</p>
           <a href="#kontakt" class="calc-cta">Få et gratis og præcist tilbud →</a>
         </div>
       </div>
@@ -867,6 +861,15 @@
     </div>
   </section>
 
+  <!-- COOKIE BANNER -->
+  <div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999; background:#1a140d; color:rgba(255,255,255,0.88); padding:1.2rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; border-top:1px solid rgba(255,255,255,0.1);">
+    <p style="margin:0; font-size:0.82rem; line-height:1.6; max-width:680px;">Vi bruger cookies til at huske dine præferencer og forbedre din oplevelse. Ved at fortsætte accepterer du vores brug af cookies.</p>
+    <div style="display:flex; gap:0.75rem; flex-shrink:0;">
+      <button onclick="cookieAccept()" style="background:white; color:#1a140d; border:none; padding:0.6rem 1.4rem; font-family:'Outfit',sans-serif; font-size:0.82rem; font-weight:500; cursor:pointer;">Accepter</button>
+      <button onclick="cookieDecline()" style="background:transparent; color:rgba(255,255,255,0.6); border:1px solid rgba(255,255,255,0.2); padding:0.6rem 1.4rem; font-family:'Outfit',sans-serif; font-size:0.82rem; cursor:pointer;">Afvis</button>
+    </div>
+  </div>
+
   <footer>
     <div class="footer-logo">Nikolaj Høyer · Tømrer</div>
     <p>CVR: 42435120 · Nordsjælland · © 2026</p>
@@ -924,8 +927,8 @@
     svcResetTimer();
 
     let calcType = 'terrasse';
-    const traesorter = ['Imprægneret gran','Douglas-fyr','Thermotræ','Bangkirai'];
-    const traePriser = [700,950,1150,1550];
+    const traesorter = ['Trykimprægneret fyr','Thermofyr','Jatoba','Cumaru','Ipé'];
+    const traePriser = [650,950,1250,1300,1600];
     const komplexLabels = ['Enkel','Standard','Hævet / L-form'];
     const komplexFactor = [1.0,1.25,1.6];
     const gelaenderLabels = ['Nej','Enkelt side','Rundt'];
@@ -934,7 +937,7 @@
     const laageLabels = ['Ingen','Enkelt låge','Dobbelt låge'];
     const laagePris = [0,3200,5500];
 
-    function cfmt(n) { return Math.round(n).toLocaleString('da-DK') + ' kr.'; }
+    function cfmt(n) { return 'fra ' + Math.round(n/500)*500 + ' kr.'; }
 
     function calcSetType(t) {
       calcType = t;
@@ -945,7 +948,7 @@
     }
 
     function calcUpdate() {
-      let mat=0,arb=0,breakdown=[];
+      let total=0;
       if (calcType==='terrasse') {
         const areal=+document.getElementById('c-areal').value;
         const ts=+document.getElementById('c-traesort').value;
@@ -958,18 +961,12 @@
         document.getElementById('c-gelaender-out').textContent=gelaenderLabels[gel];
         document.getElementById('c-nedrivning-out').textContent=ned?'Ja':'Nej';
         document.querySelectorAll('#c-traetags .c-tag').forEach((el,i)=>el.classList.toggle('active',i===ts));
-        const matPrM2=traePriser[ts]*komplexFactor[kx];
-        const arbPrM2=550*komplexFactor[kx];
-        mat=areal*matPrM2; arb=areal*arbPrM2;
-        if(gel===1){mat+=areal*0.4*600;arb+=areal*0.4*350;}
-        if(gel===2){mat+=Math.sqrt(areal)*4*600;arb+=Math.sqrt(areal)*4*350;}
-        if(ned){arb+=areal*180+2500;}
-        breakdown=[
-          ['Terrassedæk ('+areal+' m² × '+Math.round(matPrM2)+' kr./m²)',Math.round(areal*matPrM2)],
-          ['Arbejdsløn ('+areal+' m² × '+Math.round(arbPrM2)+' kr./m²)',Math.round(areal*arbPrM2)],
-          ...(gel>0?[['Gelænder',Math.round((gel===1?areal*0.4:Math.sqrt(areal)*4)*950)]]:[] ),
-          ...(ned?[['Nedrivning & bortkørsel',Math.round(areal*180+2500)]]:[] ),
-        ];
+        const prM2=(traePriser[ts]+550)*komplexFactor[kx];
+        total=areal*prM2;
+        if(gel===1) total+=areal*0.4*950;
+        if(gel===2) total+=Math.sqrt(areal)*4*950;
+        if(ned) total+=areal*180+2500;
+        total*=1.25;
       } else {
         const meter=+document.getElementById('c-meter').value;
         const hoejde=+document.getElementById('c-hoejde').value;
@@ -983,28 +980,27 @@
         document.getElementById('c-gammel-out').textContent=gammel?'Ja':'Nej';
         document.querySelectorAll('#c-hegntags .c-tag').forEach((el,i)=>el.classList.toggle('active',i===ht));
         const hoejdeFactor=0.7+(hoejde-120)/100*0.3;
-        const baseMat=380*hegntypeFactor[ht]*hoejdeFactor;
-        const baseArb=280*hegntypeFactor[ht]*hoejdeFactor;
-        mat=meter*baseMat+laagePris[laage]*0.6;
-        arb=meter*baseArb+laagePris[laage]*0.4;
-        if(gammel) arb+=meter*120+1500;
-        breakdown=[
-          ['Hegn ('+meter+' m × '+Math.round(baseMat)+' kr./m)',Math.round(meter*baseMat)],
-          ['Arbejdsløn ('+meter+' m × '+Math.round(baseArb)+' kr./m)',Math.round(meter*baseArb)],
-          ...(laage>0?[['Låge',laagePris[laage]]]:[] ),
-          ...(gammel?[['Nedtagning af hegn',Math.round(meter*120+1500)]]:[] ),
-        ];
+        const prM=(380+280)*hegntypeFactor[ht]*hoejdeFactor;
+        total=meter*prM+laagePris[laage];
+        if(gammel) total+=meter*120+1500;
+        total*=1.25;
       }
-      const exMoms=mat+arb;
-      const total=exMoms*1.25;
       document.getElementById('c-total').textContent=cfmt(total);
-      document.getElementById('c-mat').textContent=cfmt(mat);
-      document.getElementById('c-arb').textContent=cfmt(arb);
-            document.getElementById('c-breakdown').innerHTML=
-        breakdown.map(([l,v])=>'<div class="breakdown-row-c"><span>'+l+'</span><span>'+Math.round(v).toLocaleString('da-DK')+' kr.</span></div>').join('')+
-        '<div class="breakdown-row-c"><span>I alt ex. moms</span><span>'+Math.round(exMoms).toLocaleString('da-DK')+' kr.</span></div>';
     }
     calcUpdate();
+
+    // Cookie samtykke
+    function cookieAccept() {
+      localStorage.setItem('cookie_consent','accepted');
+      document.getElementById('cookie-banner').style.display='none';
+    }
+    function cookieDecline() {
+      localStorage.setItem('cookie_consent','declined');
+      document.getElementById('cookie-banner').style.display='none';
+    }
+    if (!localStorage.getItem('cookie_consent')) {
+      document.getElementById('cookie-banner').style.display='flex';
+    }
 
     // Lightbox
     let lightboxItems = [];
